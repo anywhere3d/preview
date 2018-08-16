@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <meta name="description" contents="{{description}}">
+    <!-- link rel="manifest" href="/manifest.json" -->
+    <title>Anywhere 3D Preview (v1.1)</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootbox-dialoges.css">
+    <link rel="stylesheet" href="/css/side-panels.css">
+    <link rel="stylesheet" href="/css/messg.css" >
+    <link rel="stylesheet" href="/css/spectrum.css">
+    <link rel="stylesheet" href="/css/colorpicker.css">
+    <link rel="stylesheet" href="/css/spinner.css">
+    <link rel="stylesheet" href="/css/jquery-ui.css">
+    <link rel="stylesheet" href="/css/alerts.css">
+    <link rel="stylesheet" href="/css/panel-ui.css">
+    <link rel="stylesheet" href="/css/anywhere3d.css">
+    <link rel="stylesheet" href="/css/joystick.css">
+    <link rel="stylesheet" href="/css/jquery.Jcrop.css">
+
+                <!-- JQUERY -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery-ui.js"></script>
+    <script src="/js/jquery.Jcrop.js"></script>
+    <script src="/js/jquery.lazy.js"></script>
+    <script src="/js/jquery.lazy.plugins.js"></script>
+
+    <script>
+    
+        debugMode = false;
+        var jsFolder = "/js/";
+        var navbarFolder = "/navbar/";
+        var scriptsFolder = "/scripts/";
+        var skinnedFolder  = "/skinned/";
+        var componentsFolder = "/components/";
+        var animationsFolder = "/animations/";
+        $.ajaxSetup({ cache: false });
+    
+    </script>
+
+</head>
+
+<body>
+
+<style>
+
+    body { margin:0px; height:100vh; overflow:hidden; font-family: Arial, sans-serif; }
+    canvas { display:block !important; }
+
+    #body-section { 
+        height:100%; padding-top:0px; padding-bottom:0px; 
+        background-color:rgba(0,0,0,1); overflow:hidden; 
+    }
+
+    .navbar.navbar-default.navbar-fixed-top { background: -webkit-linear-gradient(#484646,#020202); }
+
+    #render-container { 
+        width:100%; height:100%; 
+        opacity:1; background-color:rgb(0,0,0); 
+    }
+
+    #joystick1, #joystick2, #jumpButton  { z-index:0 !important; }
+
+    .twitter-holder { text-align:center; margin:10px 0px; }    
+
+    .help-helpers a,
+    .menu-helpers a,
+    .editor-helpers a,
+    .mode-helpers a,
+    .updater-helpers a,
+    .helpers a { font:bold 16px Arial; cursor:pointer; text-decoration:none; }
+
+    .help-helpers a {font:normal 14px Arial;color:white; font-weight:normal;}
+
+    .ui-dialog { opacity:1 !important; }
+
+    .left-slot, .right-slot { margin-bottom:10px; }
+    .side-holder { width:84%; margin-bottom:10px; }    
+
+    .modal-dialog {
+        width:fit-content;
+        max-width: 400px;
+    }
+
+</style>
+
+<nav class="navbar navbar-default navbar-fixed-top">
+
+    <div id="navbar-holder" class="container">
+        <script>
+        //  navbar-index.html
+            var navbarHolderSelector = "#navbar-holder";
+            var navbarComponent = navbarFolder + "navbar-index.html";
+            $(navbarHolderSelector).load(navbarComponent, function(response, status, xhr){
+                debugMode && console.log("navbar-index:", status);
+            });
+        </script>
+    </div>
+
+</nav>
+
+
+<section class="mbr-section" id="body-section">
+
+    <div id="render-container" class="mbr-overlay"></div>
+
+    <div class="joystick-controls" id="joystick-controls-1"></div>
+    <div class="joystick-controls" id="joystick-controls-2"></div>
+
+    <div class="side-panel" id="left-side">
+        <div id="left-side-pinbtn" title="click this to pin/unpin panel"></div>
+
+        <div id="left-side-content">
+
+            <div id="left-slot1-holder"></div>
+            <div id="left-slot2-holder"></div>
+            <div id="left-slot3-holder"></div>
+            <div id="left-slot4-holder"></div>
+            <div id="left-slot5-holder"></div>
+            <div id="left-slot6-holder"></div>
+            <div id="left-slot7-holder"></div>
+            <div id="left-slot8-holder"></div>
+            <div id="left-slot9-holder"></div>
+            <div id="left-slot10-holder"></div>
+
+            <div id="help-holder">
+
+                <li class="helpers"><a>walk: Use arrow keys</a>
+                    <ul>
+                        <li class="help-helpers"><a>Use keys ASDW</a></li>
+                        <li class="help-helpers"><a>Use left virtual Joystick</a></li>
+                        <li class="help-helpers"><a>Use Action controls buttons</a></li>
+                    </ul>
+                </li>
+
+                <li class="helpers"><a>jump: Use key [SPACE]</a>
+                    <ul>
+                        <li class="help-helpers"><a>Click screen Jump cycle button</a></li>
+                        <li class="help-helpers"><a>Use Action controls Jump button</a></li>
+                    </ul>
+                </li>
+
+                <li class="helpers"><a>camera:</a>
+                    <ul>
+                        <li class="help-helpers"><a>Use right virtual Joystick</a></li>
+                        <li class="help-helpers"><a>Press mouse button and drag</a></li>
+                    </ul>
+                </li>
+
+                <li class="helpers"><a>zoom in/out:</a>
+                    <ul>
+                        <li class="help-helpers"><a> Use mouse wheel</a></li>
+                    </ul>
+                </li>
+
+                <li class="helpers"><a>open Action controls panel:</a>
+                    <ul>
+                        <li class="help-helpers"><a>Move your mouse to the right-end of this window</a></li>
+                    </ul>
+                </li>
+
+                <li class="helpers"><a>close this side panel:</a>
+                    <ul>
+                        <li class="help-helpers"><a>Move your mouse out of this panel</a></li>
+                    </ul>
+                </li>
+
+                <li class="helpers"><a>pin this panel opened:</a>
+                    <ul>
+                        <li class="help-helpers"><a>Click this panel top-right icon</a></li>
+                    </ul>
+                </li>
+
+                <li class="helpers"><a>unpin this panel to close:</a>
+                    <ul>
+                        <li class="help-helpers"><a>Click this panel top-right pin icon</a></li>
+                    </ul>
+                </li>
+
+            </div>
+
+            <div class="twitter-holder">
+                <a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-url="http://anywhere3d.com/preview/#" data-lang="en" data-show-count="false">Tweet</a>
+                <a href="https://twitter.com/anywhere3d?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-screen-name="false" data-lang="en" data-show-count="false">Follow</a>
+                <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+            </div>
+        </div>
+    </div>
+
+    <div class="side-panel" id="right-side">
+        <div id="right-side-pinbtn" title="click this to pin/unpin panel"></div>
+
+        <div id="right-side-content">
+
+            <div id="actions-holder">
+                <li id="action-controls" class="menu-helpers"><a>Action Controls</a></li>
+            </div>
+
+            <div id="right-slot1-holder" class="side-holder"></div>
+            <div id="right-slot2-holder" class="side-holder"></div>
+            <div id="right-slot3-holder" class="side-holder"></div>
+            <div id="right-slot4-holder" class="side-holder"></div>
+            <div id="right-slot5-holder" class="side-holder"></div>
+            <div id="right-slot6-holder" class="side-holder"></div>
+            <div id="right-slot7-holder" class="side-holder"></div>
+            <div id="right-slot8-holder" class="side-holder"></div>
+            <div id="right-slot9-holder" class="side-holder"></div>
+            <div id="right-slot10-holder" class="side-holder"></div>
+
+            <div id="help-holder" style="margin-top:20px;">
+
+                <h4>Help:</h4>
+
+                <li class="helpers"><a>walk: Use arrow keys</a>
+                    <ul>
+                        <li class="help-helpers"><a>Use keys ASDW</a></li>
+                        <li class="help-helpers"><a>Use left virtual Joystick</a></li>
+                        <li class="help-helpers"><a>Use Action controls buttons</a></li>
+                    </ul>
+                </li>
+
+                <li class="helpers"><a>jump: Use key [SPACE]</a>
+                    <ul>
+                        <li class="help-helpers"><a>Click screen Jump cycle button</a></li>
+                        <li class="help-helpers"><a>Use Action controls Jump button </a></li>
+                    </ul>
+                </li>
+
+                <li class="helpers"><a>camera:</a>
+                    <ul>
+                        <li class="help-helpers"><a>Use right virtual Joystick</a></li>
+                        <li class="help-helpers"><a>Press mouse button and drag</a></li>
+                    </ul>
+                </li>
+
+                <li class="helpers"><a>zoom in/out:</a>
+                    <ul>
+                        <li class="help-helpers"><a> Use mouse wheel</a></li>
+                    </ul>
+                </li>
+
+                <li class="helpers"><a>pin this panel opened:</a>
+                    <ul>
+                        <li class="help-helpers"><a>Click this panel top-left gear icon</a></li>
+                    </ul>
+                </li>
+
+
+                <li class="helpers"><a>unpin this panel to close:</a>
+                    <ul>
+                        <li class="help-helpers"><a>Click this panel top-left pin icon</a></li>
+                    </ul>
+                </li>
+
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+        <!-- SOCKETCLUSTER -->
+
+<script src="/js/socketcluster.js"></script>
+<script src="/js/sc-codec-min-bin.js"></script>
+
+
+       <!-- INFLATE - DEFLATE -->
+
+<script src="/js/rawinflate.js"></script>
+<script src="/js/rawdeflate.js"></script>
+<script src="/scripts/encode.js"></script>
+<script src="/scripts/decode.js"></script>
+
+            <!-- ZARGODB -->
+
+<script src="/js/zangodb.min.js"></script>
+<script src="/js/anywheredb.js"></script>
+
+         <!-- LOCAL STORAGE -->
+
+<script src="/js/store2.js"></script>
+<script src="/js/store.on.js"></script>
+<script src="/js/store.array.js"></script>
+
+        <!-- LOCAL FORAGE -->
+
+<!-- script src="/js/localforage.js"></script -->
+<script>
+/*
+    var CacheStorage = localforage.createInstance({
+        driver: localforage.INDEXEDDB,
+        name: "anywhere3d",
+        storeName: "cache",
+        version: 1.0
+    });
+
+    CacheStorage.ready().then(function() {
+        console.log("[CacheStorage ready]:", CacheStorage.driver()); // <-- asyncStorage
+    }).catch(function (err) {
+        console.error("[CacheStorage Error]:", err); 
+    });
+*/
+</script>
+
+               <!-- W3 -->
+
+<script src="/js/w3.js"></script>
+
+          <!-- USER SETTINGS -->
+
+<script src="/js/userSettings.js"></script>
+
+        <!-- LIBRARIES -->
+
+<script src="/js/validator.min.js"></script>
+<script async src="/js/alerts.js"></script>
+<script async src="/js/bootbox.min.js"></script>
+<script async src="/js/bootstrap.min.js"></script>
+<script async src="/js/DeviceDetector.js"></script>
+<script async src="/js/MathDecimalAdjustment.js"></script>
+<script async src="/js/html2canvas.js"></script>
+<script async src="/js/spectrum.js"></script>
+<script async src="/js/watermark.js"></script>
+<script async src="/js/sharer.js"></script>
+<script async src="/js/helpers.js"></script>
+<script async src="/js/side-panels.js"></script>
+
+        <!-- THREEJS -->
+
+<script src="/three/three.js"></script>
+<script src="/three/EditorControls.js"></script>
+<script src="/three/Detector.js"></script>
+<script src="/three/Projector.js"></script>
+<script src="/three/Animation.js"></script>
+<script src="/three/AnimationHandler.js"></script>
+<script src="/three/KeyFrameAnimation.js"></script>
+<script src="/js/shader.js"></script>
+
+<script>
+    THREE.Cache.enabled = true;
+    THREE.Texture.DEFAULT_IMAGE = "https://i.imgur.com/8eycYxu.png";
+</script>
+
+       <!-- MESHWALK -->
+
+<script src="/js/MW.js"></script>
+<script src="/js/MWtps.js"></script>
+<script src="/js/VirtualInput.js"></script>
+
+        <!-- SCENE -->
+
+<script src="/js/scene-helpers.js"></script>
+
+<script>
+
+//  scene.js
+
+    var debugMode;
+
+    var fontFolder = "/three/fonts/";
+    var fontPath = fontFolder + "helvetiker_regular.typeface.json";
+    var sceneContainerSelector = "#render-container";
+    var container = $(sceneContainerSelector)[0];
+
+    var scene, 
+        camera, 
+        renderer, 
+        controls;
+
+    var sceneLights, 
+        axisCustomHelper, 
+        axisOriginHelper;
+
+    var projector, 
+        keyboard, 
+        clock;
+
+    var scenename = "Webspaces";
+
+    scene = new THREE.Scene();
+    scene.name = scenename;
+
+    camera = new FpsCamera(50, 1, 10000);
+    camera.position.set(0, 20, 100);
+//  controls = new THREE.EditorControls(camera);
+
+    scene.add(directionalLight(0xffffff,  1000, 1000,  1000, 0.5));
+    scene.add(directionalLight(0xffffff,  1000, 1000, -1000, 0.5)); 
+    scene.add(directionalLight(0xffffff, -1000, 1000,  1000, 0.5)); 
+    scene.add(directionalLight(0xffffff, -1000, 1000, -1000, 0.5));
+    scene.add(directionalLight(0xffffff,     0,-5000,     0, 0.3));
+
+    groundHelper = new GroundHelper(1000, 10);  
+    groundHelper.visible = false;
+    axisCustomHelper = new CustomAxisHelper(5200);
+    axisCustomHelper.visible = false;
+    axisOriginHelper = new OriginAxisHelper(1200);
+    axisOriginHelper.visible = false;
+
+    projector = new THREE.Projector();
+//  keyboard = new KeyboardState();
+    clock = new THREE.Clock();
+
+    renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        preserveDrawingBuffer: true,
+    });
+
+    renderer.shadowMap.enabled = true;
+    renderer.setPixelRatio( window.devicePixelRatio );
+//  renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( container.clientWidth, container.clientHeight );
+    container.appendChild( renderer.domElement );
+
+</script>
+
+<script>
+
+//  MW world.js
+
+    var world, groundBody;
+
+//  MESHWALK WORLD.
+
+    world = new MW.World();
+
+//  OCTREE.
+
+//  Make a octree object, which will be the 
+//  container of rigid objects such as terrain ect.
+    partition = 5;
+    min = new THREE.Vector3( -5000, -1000, -5000 );
+    max = new THREE.Vector3(  5000,  1000,  5000 );
+    octree = new MW.Octree( min, max, partition );
+    world.add( octree );
+
+//  Ground.
+    var ground = new THREE.Mesh(
+        new THREE.PlaneGeometry( 6000, 6000, 1, 1 ),
+        new THREE.MeshBasicMaterial({ 
+            color:0x888888,
+            transparent:true,
+            opacity:0.5, 
+            wireframe:false 
+        })
+    );
+    ground.rotation.x = THREE.Math.degToRad( -90 ); // -Math.PI/2
+
+//  We want the ground as collision surface only,
+//  so we do not add the ground in the scene.
+//  scene.add( ground );
+
+//  Add the ground to WALKMESH world octree object.
+//  MESHWALK use octree system to detect collision objects.
+    octree.importThreeMesh( ground ); // IMPORTANT //
+
+</script>
+
+<script src="/js/EdgesHelper.js"></script>
+
+        <!-- AW3D -->
+
+<script src="/js/AW3D.js"></script>
+<script src="/js/PlayerController.js"></script>
+<script src="/js/KeyInputControls.js"></script>
+<script src="/js/JoystickControls.js"></script>
+<script src="/js/PlayerLabel.js"></script>
+<script src="/js/OutfitLoader.js"></script>
+<script src="/js/loaders/animationsLoader.js"></script>
+
+    <!-- LOADERS -->
+
+<!-- script src="/js/loaders/bonesLoader.js"></script -->
+<!-- script src="/js/loaders/skeletonLoader.js"></script -->
+<!-- script async src="/js/loaders/fmBodyLoader.js"></script -->
+<!-- script async src="/js/loaders/fmHairsLoader.js"></script -->
+<!-- script async src="/js/loaders/fmDressLoader.js"></script -->
+<!-- script async src="/js/loaders/fmSandalShoesLoader.js"></script -->
+<!-- script async src="/js/loaders/fmBraLoader.js"></script -->
+<!-- script async src="/js/loaders/fmPantiesLoader.js"></script -->
+<!-- script async src="/js/loaders/fmSkirtLoader.js"></script -->
+<!-- script async src="/js/loaders/fmSneakersLoader.js"></script -->
+<!-- script async src="/js/loaders/fmTailDressLoader.js"></script -->
+<!-- script async src="/js/loaders/fmTrousersLoader.js"></script -->
+<!-- script async src="/js/loaders/fmTshirtLoader.js"></script -->
+<!-- script async src="/js/loaders/hmBodyLoader.js"></script -->
+<!-- script async src="/js/loaders/hmHairsLoader.js"></script -->
+<!-- script async src="/js/loaders/hmTshirtLoader.js"></script -->
+<!-- script async src="/js/loaders/hmTrousersLoader.js"></script -->
+<!-- script async src="/js/loaders/hmBoxersLoader.js"></script -->
+<!-- script async src="/js/loaders/hmSneakersLoader.js"></script -->
+
+    <!-- COMPONENTS -->
+
+<script>
+//  snapshot-crop-button.html
+    var snapshotHolderSelector = "#right-slot10-holder";
+    var snapshotCropButtonComponent = componentsFolder + "snapshot-crop-button.html";
+    $(snapshotHolderSelector).load(snapshotCropButtonComponent, function(response, status, xhr){
+        debugMode && console.log("snapshot-crop-button:", status);
+    });
+</script>
+
+    <!-- RUNTIME ENGINE -->
+
+<script src="/js/jquery-update-engine.js"></script>
+<script src="/js/jquery-render-engine.js"></script>
+
+<script>
+
+//  app.js
+
+    var debugMode;
+    var mouse = new THREE.Vector2();
+
+    var rendererHalfWidth = renderer.domElement.width * 0.5;
+    var rendererHalfHeight = renderer.domElement.height * 0.5;
+
+    localPlayer.holder.visible = false;
+    localPlayer.controller.center.set(0,1,0);
+    localPlayer.controller.direction = Math.PI;
+
+//  Background.
+    scene.background = new THREE.Color(0,0,0);
+
+
+//  Animate.
+
+    animate();
+
+    function animate(){
+
+        windowAnimationFrameRequestID = requestAnimationFrame( animate );
+
+        render();
+
+        update();
+
+    }
+
+
+//  Event Listeners.
+
+    $(window).on( "resize", onWindowResize );
+
+    function onWindowResize() {
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize( container.clientWidth, container.clientHeight );
+        rendererHalfWidth = renderer.domElement.width * 0.5;
+        rendererHalfHeight = renderer.domElement.height * 0.5;
+    }
+
+    $(window).on( "mousemove", onMouseMove );
+
+    function onMouseMove( event ) {
+        mouse.x = ( event.clientX - rendererHalfWidth );
+        mouse.y = ( event.clientY - rendererHalfHeight );
+    }
+
+
+//  action-controls.html
+
+    var actionHolderSelector = "#actions-holder";
+    var actionControlsSelector = "#action-controls";
+    var actionControlsComponent = componentsFolder + "action-controls.html";
+    $(actionHolderSelector).load(actionControlsComponent, function(response, status, xhr){
+        debugMode && console.log("action-controls:", status);
+    });
+
+</script>
+
+<script>
+
+//  windowUrlDnaHash.js (v1.0)
+
+	window.URL = window.URL || window.webkitURL;
+
+	if ( window.location.hash ) {
+        var hash = window.location.hash.substr( 1 );
+        debugMode && console.log( "hash:", hash );
+        localPlayer.outfit.fromDNA( hash );
+        scene.add( localPlayer.outfit.direction );
+	}
+
+</script>
+
+<script src="/js/editor-panel.js"></script>
+<script src="/js/dialogTargetEventListeners.js"></script>
+
+</body>
+</html>
