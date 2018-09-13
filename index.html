@@ -21,12 +21,10 @@
     <link rel="stylesheet" href="/css/panel-ui.css">
     <link rel="stylesheet" href="/css/anywhere3d.css">
     <link rel="stylesheet" href="/css/joystick.css">
-    <link rel="stylesheet" href="/css/jquery.Jcrop.css">
 
                 <!-- JQUERY -->
     <script src="/js/jquery.min.js"></script>
     <script src="/js/jquery-ui.js"></script>
-    <script src="/js/jquery.Jcrop.js"></script>
     <script src="/js/jquery.lazy.js"></script>
     <script src="/js/jquery.lazy.plugins.js"></script>
 
@@ -212,63 +210,10 @@
             <div id="right-slot9-holder" class="side-holder"></div>
             <div id="right-slot10-holder" class="side-holder"></div>
 
-            <div id="help-holder" style="margin-top:20px;">
-
-                <h4>Help:</h4>
-
-                <li class="helpers"><a>walk: Use arrow keys</a>
-                    <ul>
-                        <li class="help-helpers"><a>Use keys ASDW</a></li>
-                        <li class="help-helpers"><a>Use left virtual Joystick</a></li>
-                        <li class="help-helpers"><a>Use Action controls buttons</a></li>
-                    </ul>
-                </li>
-
-                <li class="helpers"><a>jump: Use key [SPACE]</a>
-                    <ul>
-                        <li class="help-helpers"><a>Click screen Jump cycle button</a></li>
-                        <li class="help-helpers"><a>Use Action controls Jump button </a></li>
-                    </ul>
-                </li>
-
-                <li class="helpers"><a>camera:</a>
-                    <ul>
-                        <li class="help-helpers"><a>Use right virtual Joystick</a></li>
-                        <li class="help-helpers"><a>Press mouse button and drag</a></li>
-                    </ul>
-                </li>
-
-                <li class="helpers"><a>zoom in/out:</a>
-                    <ul>
-                        <li class="help-helpers"><a> Use mouse wheel</a></li>
-                    </ul>
-                </li>
-
-                <li class="helpers"><a>pin this panel opened:</a>
-                    <ul>
-                        <li class="help-helpers"><a>Click this panel top-left gear icon</a></li>
-                    </ul>
-                </li>
-
-
-                <li class="helpers"><a>unpin this panel to close:</a>
-                    <ul>
-                        <li class="help-helpers"><a>Click this panel top-left pin icon</a></li>
-                    </ul>
-                </li>
-
-            </div>
-
         </div>
     </div>
 
 </section>
-
-        <!-- SOCKETCLUSTER -->
-
-<script src="/js/socketcluster.js"></script>
-<script src="/js/sc-codec-min-bin.js"></script>
-
 
        <!-- INFLATE - DEFLATE -->
 
@@ -288,33 +233,9 @@
 <script src="/js/store.on.js"></script>
 <script src="/js/store.array.js"></script>
 
-        <!-- LOCAL FORAGE -->
-
-<!-- script src="/js/localforage.js"></script -->
-<script>
-/*
-    var CacheStorage = localforage.createInstance({
-        driver: localforage.INDEXEDDB,
-        name: "anywhere3d",
-        storeName: "cache",
-        version: 1.0
-    });
-
-    CacheStorage.ready().then(function() {
-        console.log("[CacheStorage ready]:", CacheStorage.driver()); // <-- asyncStorage
-    }).catch(function (err) {
-        console.error("[CacheStorage Error]:", err); 
-    });
-*/
-</script>
-
-               <!-- W3 -->
+            <!-- W3 -->
 
 <script src="/js/w3.js"></script>
-
-          <!-- USER SETTINGS -->
-
-<script src="/js/userSettings.js"></script>
 
         <!-- LIBRARIES -->
 
@@ -414,7 +335,6 @@
 
     renderer.shadowMap.enabled = true;
     renderer.setPixelRatio( window.devicePixelRatio );
-//  renderer.setSize( window.innerWidth, window.innerHeight );
     renderer.setSize( container.clientWidth, container.clientHeight );
     container.appendChild( renderer.domElement );
 
@@ -473,28 +393,6 @@
 <script src="/js/PlayerLabel.js"></script>
 <script src="/js/OutfitLoader.js"></script>
 <script src="/js/loaders/animationsLoader.js"></script>
-
-    <!-- LOADERS -->
-
-<!-- script src="/js/loaders/bonesLoader.js"></script -->
-<!-- script src="/js/loaders/skeletonLoader.js"></script -->
-<!-- script async src="/js/loaders/fmBodyLoader.js"></script -->
-<!-- script async src="/js/loaders/fmHairsLoader.js"></script -->
-<!-- script async src="/js/loaders/fmDressLoader.js"></script -->
-<!-- script async src="/js/loaders/fmSandalShoesLoader.js"></script -->
-<!-- script async src="/js/loaders/fmBraLoader.js"></script -->
-<!-- script async src="/js/loaders/fmPantiesLoader.js"></script -->
-<!-- script async src="/js/loaders/fmSkirtLoader.js"></script -->
-<!-- script async src="/js/loaders/fmSneakersLoader.js"></script -->
-<!-- script async src="/js/loaders/fmTailDressLoader.js"></script -->
-<!-- script async src="/js/loaders/fmTrousersLoader.js"></script -->
-<!-- script async src="/js/loaders/fmTshirtLoader.js"></script -->
-<!-- script async src="/js/loaders/hmBodyLoader.js"></script -->
-<!-- script async src="/js/loaders/hmHairsLoader.js"></script -->
-<!-- script async src="/js/loaders/hmTshirtLoader.js"></script -->
-<!-- script async src="/js/loaders/hmTrousersLoader.js"></script -->
-<!-- script async src="/js/loaders/hmBoxersLoader.js"></script -->
-<!-- script async src="/js/loaders/hmSneakersLoader.js"></script -->
 
     <!-- COMPONENTS -->
 
